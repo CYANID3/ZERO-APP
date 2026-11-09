@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="zero_widget_wide">ZERO — отсчёт</string>
+    <string name="zero_widget_small">ZERO — дни</string>
+    <string name="zero_widget_desc">Сколько осталось до события</string>
+</resources>

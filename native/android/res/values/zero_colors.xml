@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="zero_bg">#F4F5F7</color>
+    <color name="zero_icon_bg">#0E0F12</color>
+    <color name="zero_icon_fg">#8AB4FF</color>
+    <color name="zero_w_bg">#FFFFFF</color>
+    <color name="zero_w_tx">#14161A</color>
+    <color name="zero_w_mu">#5E6570</color>
+    <color name="zero_w_mu2">#3A3F47</color>
+</resources>

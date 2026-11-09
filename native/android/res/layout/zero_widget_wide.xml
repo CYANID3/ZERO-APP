@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/zw_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center_vertical"
+    android:background="@drawable/zero_widget_bg"
+    android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="14dp" android:paddingBottom="14dp">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/zw_dot" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="●" android:textSize="12sp" android:textColor="#8AB4FF" android:layout_marginEnd="8dp" />
+        <TextView android:id="@+id/zw_title" android:text="Отпуск" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/zero_w_tx"
+            android:singleLine="true" android:ellipsize="end" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:baselineAligned="true" android:layout_marginTop="4dp">
+        <TextView android:id="@+id/zw_days" android:text="12" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="48sp" android:textStyle="bold" android:textColor="@color/zero_w_tx"
+            android:fontFeatureSettings="tnum" android:includeFontPadding="false" />
+        <TextView android:id="@+id/zw_word" android:text="дней" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="15sp" android:textColor="@color/zero_w_mu" android:layout_marginStart="6dp" />
+        <TextView android:id="@+id/zw_hm" android:text="08:30" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textSize="26sp" android:textStyle="bold" android:textColor="@color/zero_w_mu2"
+            android:fontFeatureSettings="tnum" android:layout_marginStart="10dp" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/zw_sub" android:text="15 декабря, 08:30" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textSize="12.5sp" android:textColor="@color/zero_w_mu" android:layout_marginTop="4dp"
+        android:singleLine="true" android:ellipsize="end" />
+</LinearLayout>
