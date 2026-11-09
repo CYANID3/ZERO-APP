@@ -1,0 +1,9 @@
+{
+  "appId": "app.zero.countdown",
+  "appName": "ZERO",
+  "webDir": "www",
+  "android": { "adjustMarginsForEdgeToEdge": "disable", "backgroundColor": "#0E0F12" },
+  "plugins": {
+    "LocalNotifications": { "smallIcon": "ic_stat_zero", "iconColor": "#8AB4FF" }
+  }
+}

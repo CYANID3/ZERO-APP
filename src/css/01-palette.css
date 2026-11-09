@@ -1,0 +1,30 @@
+:root, :root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E0F12; --card: #17191E; --sub: #20232A; --sub2: #2A2D35; --bd: #22252C;
+  --tx: #F2F3F5; --mu: #9AA0AA; --mu2: #C9CDD4;
+  --ac: #8AB4FF; --acs: rgba(138,180,255,.16); --on: #0E0F12;
+  --danger: #FF8A80; --warn: #F2C35A; --ok: #5CC8B0;
+  --scrim: rgba(0,0,0,.6); --shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F4F5F7; --card: #FFFFFF; --sub: #EEF0F3; --sub2: #E2E5EA; --bd: #E6E8EC;
+  --tx: #14161A; --mu: #5E6570; --mu2: #3A3F47;
+  --ac: #2F64D6; --acs: rgba(47,100,214,.12); --on: #FFFFFF;
+  --danger: #C62828; --warn: #8A6100; --ok: #13806A;
+  --scrim: rgba(20,22,26,.4); --shadow: 0 10px 40px rgba(20,22,26,.18);
+}
+
+/* Цвета событий: --ec — точка и крупные цифры, --et — заливка плитки */
+.c-orange, .t-orange { --ec: #F2A65A; --et: rgba(242,166,90,.14); }
+.c-pink,   .t-pink   { --ec: #E879A6; --et: rgba(232,121,166,.14); }
+.c-teal,   .t-teal   { --ec: #5CC8B0; --et: rgba(92,200,176,.14); }
+.c-blue,   .t-blue   { --ec: #8AB4FF; --et: rgba(138,180,255,.14); }
+.c-violet, .t-violet { --ec: #B79CFF; --et: rgba(183,156,255,.14); }
+.c-yellow, .t-yellow { --ec: #E8D45C; --et: rgba(232,212,92,.13); }
+[data-theme="light"] .c-orange, [data-theme="light"] .t-orange { --ec: #B35A0A; --et: rgba(242,150,60,.16); }
+[data-theme="light"] .c-pink,   [data-theme="light"] .t-pink   { --ec: #BF2A69; --et: rgba(232,100,160,.14); }
+[data-theme="light"] .c-teal,   [data-theme="light"] .t-teal   { --ec: #0F7A64; --et: rgba(40,180,150,.14); }
+[data-theme="light"] .c-blue,   [data-theme="light"] .t-blue   { --ec: #2F64D6; --et: rgba(70,130,240,.13); }
+[data-theme="light"] .c-violet, [data-theme="light"] .t-violet { --ec: #6A48D6; --et: rgba(140,110,240,.14); }
+[data-theme="light"] .c-yellow, [data-theme="light"] .t-yellow { --ec: #806C00; --et: rgba(220,190,40,.18); }

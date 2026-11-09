@@ -1,0 +1,67 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      APP_VERSION: 1.0.${{ github.run_number }}
+      APP_VERSION_CODE: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Зависимости
+        run: npm ci
+
+      - name: Браузер для тестов
+        run: npx playwright install --with-deps chromium
+
+      - name: Сборка и тесты
+        run: npm run build && npm test
+
+      - name: Подготовка Android
+        run: npm run android:prepare
+
+      - name: Ключ подписи (постоянный, чтобы обновление ставилось поверх)
+        run: mkdir -p ~/.android && cp keystore/debug.keystore ~/.android/debug.keystore
+
+      - name: Сборка APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Файл APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk "ZERO-${APP_VERSION}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ZERO-${{ env.APP_VERSION }}
+          path: ZERO-*.apk
+
+      - name: Релиз
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${APP_VERSION}" "ZERO-${APP_VERSION}.apk" \
+            --title "ZERO ${APP_VERSION}" \
+            --notes "Сборка ${APP_VERSION} из ${GITHUB_SHA::7}. Скачайте APK на телефон и установите."

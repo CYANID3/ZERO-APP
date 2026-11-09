@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0E0F12">
+<meta name="color-scheme" content="dark light">
+<title>ZERO</title>
+<link rel="icon" href="data:,">
+<script>
+// Ранняя тема: до запуска приложения, чтобы не мигало
+(function () {
+  var t = 'dark';
+  try { var s = JSON.parse(localStorage.getItem('zero.v1') || '{}'); t = (s.settings && s.settings.theme) || 'dark'; } catch (e) {}
+  if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  if (t !== 'light') t = 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  var bg = t === 'light' ? '#F4F5F7' : '#0E0F12';
+  document.documentElement.style.background = bg;
+  document.querySelector('meta[name=theme-color]').setAttribute('content', bg);
+})();
+</script>
+<!-- @parts css src/css -->
+<script type="module" src="./src/cap.js"></script>
+</head>
+<body>
+<div id="app">
+  <header class="hd">
+    <div class="hd-t">
+      <h1>События</h1>
+      <span id="hdSub" class="hd-sub"></span>
+    </div>
+    <button id="hdAdd" class="ib ib-ac" aria-label="Новое событие" onclick="edOpen()" hidden></button>
+    <button id="hdSet" class="ib" aria-label="Настройки" onclick="stOpen()"></button>
+  </header>
+  <button id="banner" class="banner" hidden onclick="ntFix()"></button>
+  <main id="list" class="list"></main>
+  <div id="ft" class="ft">
+    <button class="btn-main" onclick="edOpen()"><span class="i-plus"></span>Новое событие</button>
+  </div>
+</div>
+
+<section id="settings" class="page" hidden aria-label="Настройки">
+  <header class="pg-hd">
+    <button class="ib ib-flat" aria-label="Назад" onclick="stClose()" data-icon="back"></button>
+    <h2>Настройки</h2>
+  </header>
+  <div id="stBody" class="pg-b"></div>
+</section>
+
+<div id="ov" class="ov" hidden>
+  <div class="scrim" onclick="shClose()"></div>
+  <div class="sh" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+    <div class="sh-grip"></div>
+    <div class="sh-hd">
+      <button id="shBack" class="ib ib-flat" aria-label="Назад" onclick="stepBack()" data-icon="back" hidden></button>
+      <h2 id="shTitle"></h2>
+      <button class="ib ib-sm" aria-label="Закрыть" onclick="shClose()" data-icon="close"></button>
+    </div>
+    <div id="shBody" class="sh-b"></div>
+    <div id="shFt" class="sh-f"></div>
+  </div>
+</div>
+
+<div id="dlg" class="dlg" hidden>
+  <div class="scrim"></div>
+  <div class="dlg-box" role="alertdialog" aria-modal="true" aria-labelledby="dlgT">
+    <h3 id="dlgT"></h3>
+    <p id="dlgP"></p>
+    <div class="dlg-btns" id="dlgBtns"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<!-- @parts js src/js -->
+</body>
+</html>
