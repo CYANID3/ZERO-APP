@@ -13,7 +13,9 @@ import android.view.Window;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.util.List;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -33,6 +35,17 @@ public class ZeroPlugin extends Plugin {
         return o;
     }
 
+    private void pushInsets(View v, WindowInsetsCompat insets, String mode) {
+        float d = v.getResources().getDisplayMetrics().density;
+        Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+        Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
+        int kb = Math.max(0, ime.bottom - bars.bottom);
+        JSObject o = insetsObj(Math.round(bars.top / d), Math.round(bars.bottom / d), Math.round(kb / d));
+        o.put("mode", mode);
+        lastInsets = o;
+        notifyListeners("insets", o);
+    }
+
     @Override
     public void load() {
         getActivity().runOnUiThread(() -> {
@@ -47,14 +60,31 @@ public class ZeroPlugin extends Plugin {
             View web = getBridge().getWebView();
             web.setOverScrollMode(View.OVER_SCROLL_NEVER);
             web.setVerticalScrollBarEnabled(false);
+            final boolean[] animating = { false };
             ViewCompat.setOnApplyWindowInsetsListener(web, (v, insets) -> {
-                float d = v.getResources().getDisplayMetrics().density;
-                Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
-                Insets ime = insets.getInsets(WindowInsetsCompat.Type.ime());
-                int kb = Math.max(0, ime.bottom - bars.bottom);
-                lastInsets = insetsObj(Math.round(bars.top / d), Math.round(bars.bottom / d), Math.round(kb / d));
-                notifyListeners("insets", lastInsets);
+                if (!animating[0]) pushInsets(v, insets, "set");
                 return insets;
+            });
+            // Клавиатура: высота на каждом кадре её анимации — лист едет вместе с ней
+            ViewCompat.setWindowInsetsAnimationCallback(web, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
+                @Override
+                public void onPrepare(WindowInsetsAnimationCompat animation) {
+                    if ((animation.getTypeMask() & WindowInsetsCompat.Type.ime()) != 0) animating[0] = true;
+                }
+
+                @Override
+                public WindowInsetsCompat onProgress(WindowInsetsCompat insets, List<WindowInsetsAnimationCompat> running) {
+                    if (animating[0]) pushInsets(web, insets, "live");
+                    return insets;
+                }
+
+                @Override
+                public void onEnd(WindowInsetsAnimationCompat animation) {
+                    if ((animation.getTypeMask() & WindowInsetsCompat.Type.ime()) == 0) return;
+                    animating[0] = false;
+                    WindowInsetsCompat now = ViewCompat.getRootWindowInsets(web);
+                    if (now != null) pushInsets(web, now, "end");
+                }
             });
             ViewCompat.requestApplyInsets(web);
         });

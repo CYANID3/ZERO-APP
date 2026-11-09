@@ -62,8 +62,9 @@ function stRender() {
         stRow('', 'Прошедшие события', '', '<span class="rv">' + (st.past === 'hide' ? 'Скрывать' : 'Внизу списка') + '</span><span class="chev">' + ICON.chev + '</span>', 'stPast()') +
       '</div>' +
       '<div class="gh">ВИДЖЕТ</div><div class="grp">' +
-        stRow('widget', 'Событие на виджете', 'Добавьте виджет ZERO на рабочий стол', '<span class="rv rv-ell">' + esc(wEv) + '</span><span class="chev">' + ICON.chev + '</span>', 'stWidget()') +
+        stRow('widget', 'На виджете', '', '<span class="rv rv-ell">' + esc(wEv) + '</span><span class="chev">' + ICON.chev + '</span>', 'stWidget()') +
       '</div>' +
+      '<p class="hint hint-pg">Виджет добавляется долгим нажатием на рабочий стол → «Виджеты» → ZERO. Есть два размера.</p>' +
       '<p class="ver">ZERO · версия ' + esc(APP_VERSION) + '</p>';
   } catch (err) {
     console.error('settings', err);

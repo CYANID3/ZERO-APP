@@ -182,3 +182,49 @@ test('у каждой кнопки есть имя', async () => {
   assert.deepEqual(a.errors, []);
   await a.close();
 });
+
+test('только что наступившее: «Наступило!» сверху, через сутки — в прошедших', async () => {
+  const data = { ...DATA, events: [...DATA.events, { id: 9, title: 'Сдача', date: '2026-11-09', time: '09:00', color: 'yellow', reminders: [], moment: true }] };
+  let a = await openApp({ data, now: NOW });
+  const first = await a.ev(() => { const c = document.querySelector('.card'); return [c.dataset.id, c.querySelector('.n-now')?.textContent, c.querySelector('.n-hms').textContent]; });
+  assert.deepEqual(first, ['9', 'Наступило!', '03:00:00']);
+  await a.ev(() => { S.settings.view = 'tiles'; renderList(); });
+  assert.equal(await a.ev(() => document.querySelector('.tile.is-big .n-now').textContent), 'Наступило!');
+  assert.deepEqual(a.errors, []);
+  await a.close();
+  a = await openApp({ data, now: NOW + 86400000 });
+  assert.equal(await a.ev(() => document.querySelector('.card[data-id="9"]').className), 'card is-past');
+  assert.deepEqual(a.errors, []);
+  await a.close();
+});
+
+test('лист: «назад» из напоминаний возвращает на то же место, единица не сбрасывает ввод', async () => {
+  const a = await openApp({ data: DATA, now: NOW });
+  await a.page.setViewportSize({ width: 412, height: 600 });
+  await a.page.click('.card[data-id="1"]'); await a.wait(350);
+  await a.ev(() => { $('shBody').scrollTop = 9999; });
+  const st = await a.ev(() => $('shBody').scrollTop);
+  assert.ok(st > 0);
+  await a.page.click('.chip-add'); await a.wait(320);
+  await a.page.fill('#remNum', '3');
+  await a.page.focus('#remNum');
+  await a.page.click('.custom .seg-b:has-text("дн")');
+  assert.equal(await a.ev(() => document.activeElement.id), 'remNum');
+  assert.equal(await a.ev(() => $('remNum').value), '3');
+  await a.page.click('.custom .btn-sm');
+  await a.page.click('#shFt .btn-main'); await a.wait(320);
+  assert.equal(await a.ev(() => $('shBody').scrollTop), st);
+  assert.match(await a.ev(() => $('shBody').textContent), /за 3 дня/);
+  assert.deepEqual(a.errors, []);
+  await a.close();
+});
+
+test('двойное касание «Сохранить» создаёт одно событие', async () => {
+  const a = await openApp({ now: NOW });
+  await a.page.click('.ft .btn-main'); await a.wait(350);
+  await a.page.fill('#edTitle', 'Раз');
+  await a.ev(() => { edSave(); edSave(); return 0; });
+  assert.equal(await a.ev(() => S.events.length), 1);
+  assert.deepEqual(a.errors, []);
+  await a.close();
+});

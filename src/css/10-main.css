@@ -45,6 +45,13 @@
 .card.is-past .c-lab { color: var(--mu); }
 .card.is-past .n-d, .card.is-past .n-hms { color: var(--mu); }
 .card.is-fresh { box-shadow: inset 0 0 0 2px var(--ac); }
+.n-now { font-size: 30px; font-weight: 800; letter-spacing: -.5px; line-height: 1.1; color: var(--tx); }
+.n-ago { font-size: 15px; color: var(--mu); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.c-cd .n-now { font-size: 28px; }
+.c-cd .n-ago .n-hms { font-size: 15px; font-weight: 700; color: var(--mu2); margin: 0; }
+.tile .n-now { font-size: 24px; }
+.tile.is-big .n-now { font-size: 44px; letter-spacing: -1px; }
+.tile.is-fresh .t-sub { margin-top: 2px; }
 
 /* Плитки */
 .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -52,7 +59,7 @@
   min-width: 0; transition: transform var(--t1) var(--ease); }
 .tile.is-big { grid-column: 1 / -1; height: 196px; border-radius: 24px; padding: 20px 18px; }
 .t-top { flex: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-.t-t { font-size: 14px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.t-t { flex: 1; min-width: 0; font-size: 14px; font-weight: 700; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .is-big .t-t { font-size: 16px; }
 .t-date { font-size: 12.5px; color: var(--mu2); white-space: nowrap; }
 .t-cd { display: flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums; }
@@ -65,7 +72,7 @@
 .is-big .t-side .n-dw { font-size: 16px; font-weight: 700; }
 .is-big .t-side .n-hms { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .t-sub { font-size: 13px; color: var(--mu2); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.t-lab { font-size: 12px; font-weight: 700; color: var(--ac); padding-top: 4px; }
+.t-lab { font-size: 12px; font-weight: 800; color: var(--tx); padding-top: 4px; }
 .tile.is-past { background: transparent; box-shadow: inset 0 0 0 1.5px var(--bd); }
 .tile.is-past .n-d { color: var(--mu); }
 .tile.is-fresh { box-shadow: inset 0 0 0 2px var(--ac); }

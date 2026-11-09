@@ -29,5 +29,7 @@ onNative((N) => {
     r.setProperty('--sat', (i.top || 0) + 'px');
     r.setProperty('--sab', (i.bottom || 0) + 'px');
     r.setProperty('--kb', (i.keyboard || 0) + 'px');
+    // live — кадры анимации клавиатуры: без собственного перехода, иначе лист отстаёт
+    document.documentElement.classList.toggle('kb-live', i.mode === 'live');
   });
 });

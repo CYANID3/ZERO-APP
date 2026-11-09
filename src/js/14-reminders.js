@@ -55,11 +55,14 @@ function remToggle(m) {
   shRefresh();
 }
 
+// Без перерисовки: иначе поле числа теряет фокус и клавиатура закрывается
 function remUnitSet(k) {
-  const v = $('remNum') ? $('remNum').value : '';
   remUnit = k;
-  shRefresh();
-  if ($('remNum')) $('remNum').value = v;
+  document.querySelectorAll('.custom .seg-b').forEach((b, i) => {
+    const on = REM_UNITS[i][0] === k;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on);
+  });
 }
 
 function remAdd() {

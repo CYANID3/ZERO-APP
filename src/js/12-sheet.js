@@ -15,10 +15,15 @@ function shOpen(view) {
   ov.classList.add('open');
 }
 
-function shPush(view) { shStack.push(view); shRender(1); }
+function shPush(view) {
+  const cur = shStack[shStack.length - 1];
+  if (cur) cur.st = $('shBody').scrollTop;   // при возврате — на то же место
+  shStack.push(view);
+  shRender(1);
+}
 
 function stepBack() {
-  if (shStack.length > 1) { shStack.pop(); shRender(-1); } else shClose();
+  if (shStack.length > 1) { shStack.pop(); shRender(-1, 'restore'); } else shClose();
 }
 
 function shRefresh() { if (shStack.length) shRender(0, true); }
@@ -41,13 +46,13 @@ function shRender(dir, keepScroll) {
   }
   paintIcons(sh);
   if (v.after) v.after();
-  if (keepScroll) body.scrollTop = st; else body.scrollTop = 0;
-  if (!dir || reduceMotion()) return;
-  // Смена вида: содержимое въезжает сбоку, край листа плавно доезжает до новой высоты
+  body.scrollTop = keepScroll === 'restore' ? (v.st || 0) : keepScroll ? st : 0;
+  if (reduceMotion() || !shIsOpen()) return;
+  // Смена вида: содержимое въезжает сбоку; любая смена высоты — край листа плавно доезжает (FLIP)
   const h1 = sh.getBoundingClientRect().height;
-  body.animate([{ transform: 'translateX(' + (dir * 28) + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,0,0,1)' });
+  if (dir) body.animate([{ transform: 'translateX(' + (dir * 28) + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.2,0,0,1)' });
   if (Math.abs(h1 - h0) > 2 && h0 > 0) {
-    sh.animate([{ transform: 'translateY(' + (h1 - h0) + 'px)' }, { transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,0,0,1)' });
+    sh.animate([{ transform: 'translateY(' + (h1 - h0) + 'px)' }, { transform: 'none' }], { duration: dir ? 280 : 200, easing: 'cubic-bezier(.2,0,0,1)' });
   }
 }
 
@@ -58,6 +63,7 @@ function shClose() {
   ov.classList.remove('open');
   clearTimeout(shCloseT);
   shCloseT = setTimeout(() => { ov.hidden = true; shStack = []; $('shBody').innerHTML = ''; $('shFt').innerHTML = ''; }, reduceMotion() ? 0 : 280);
+  if (stIsOpen()) stRender();   // настройки могли поменяться в листе (напоминания по умолчанию)
 }
 
 // Касание по листу вне поля ввода не забирает фокус у поля (иначе клавиатура прыгает)

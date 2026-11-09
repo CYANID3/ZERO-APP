@@ -31,8 +31,8 @@ function edBody() {
     '<label class="fld"><span class="fl">НАЗВАНИЕ</span>' +
       '<input id="edTitle" class="inp" maxlength="80" autocomplete="off" enterkeyhint="done" placeholder="Например, отпуск" value="' + esc(ED.title) + '"></label>' +
     '<div class="grp">' +
-      '<div class="row" onclick="edPick(event, \'edDate\')"><span class="ri">' + ICON.cal + '</span><label class="rt" for="edDate">Дата</label>' +
-        '<span class="pick"><span id="edDateV">' + esc(edDateText()) + '</span><input id="edDate" class="pick-in" type="date" required value="' + esc(ED.date) + '"></span></div>' +
+      '<div class="row" onclick="edPick(event, \'edDate\')"><span class="ri">' + ICON.cal + '</span><span class="rt">Дата</span>' +
+        '<span class="pick"><span id="edDateV">' + esc(edDateText()) + '</span><input id="edDate" class="pick-in" type="date" aria-label="Дата" required value="' + esc(ED.date) + '"></span></div>' +
       '<div class="sep"></div>' +
       '<div class="row" onclick="edPick(event, \'edTime\')"><span class="ri">' + ICON.clock + '</span><span class="rt">Время</span>' +
         (ED.hasTime ? '<span class="pick"><span id="edTimeV">' + esc(ED.time) + '</span><input id="edTime" class="pick-in" type="time" aria-label="Время" value="' + esc(ED.time) + '"></span>' : '<span class="rv">весь день</span>') +
@@ -60,6 +60,8 @@ function edAfter() {
     edHint();
   };
   d.addEventListener('change', upd); d.addEventListener('input', upd);
+  // На части браузеров касание прозрачного поля не открывает выбор — открываем сами
+  [d, tm].forEach((el) => el && el.addEventListener('click', () => { try { el.showPicker(); } catch (e) {} }));
   if (tm) { tm.addEventListener('change', upd); tm.addEventListener('input', upd); }
   edHint();
 }
@@ -102,6 +104,7 @@ function edHint() {
 }
 
 function edSave() {
+  if (!shIsOpen() || !ED) return;   // двойное касание «Сохранить» не создаёт копию
   const e = edDraft();
   if (!e) { toast('Укажите дату'); return; }
   if (ED.id) {

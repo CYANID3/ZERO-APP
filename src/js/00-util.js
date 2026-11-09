@@ -38,5 +38,4 @@ function fmtOffset(min, short) {
 // «через 1 час» для текста уведомления
 function fmtIn(min) { return fmtOffset(min).replace(/^за /, 'через '); }
 
-const today0 = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
 const isoDate = (d) => d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
